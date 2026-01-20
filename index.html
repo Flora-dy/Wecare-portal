@@ -296,28 +296,54 @@
       border-radius: 12px;
       padding: 10px 10px;
     }
-    .added-item .t { font-weight: 800; margin-bottom: 6px; }
-    .added-item .m { color: rgba(231,238,252,0.75); font-size: 12px; }
-    .added-item .a { margin-top: 8px; display: flex; gap: 10px; }
-  </style>
-</head>
-<body>
-  <div class="container">
+	    .added-item .t { font-weight: 800; margin-bottom: 6px; }
+	    .added-item .m { color: rgba(231,238,252,0.75); font-size: 12px; }
+	    .added-item .a { margin-top: 8px; display: flex; gap: 10px; }
+
+	    /* Analysis */
+	    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+	    @media (max-width: 1100px) {
+	      .analysis-grid { grid-template-columns: 1fr; }
+	    }
+	    .barlist { padding: 12px; display: grid; gap: 8px; }
+	    .barrow {
+	      display: grid;
+	      grid-template-columns: 1fr auto;
+	      gap: 10px;
+	      align-items: center;
+	      border: 1px solid rgba(231,238,252,0.12);
+	      background: rgba(0,0,0,0.16);
+	      border-radius: 12px;
+	      padding: 10px 10px;
+	      cursor: pointer;
+	    }
+	    .barrow:hover { border-color: rgba(114,183,178,0.5); background: rgba(0,0,0,0.22); }
+	    .barrow.active { border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.10); }
+	    .barname { font-weight: 850; }
+	    .barhint { color: rgba(231,238,252,0.65); font-size: 12px; margin-top: 3px; }
+	    .bartrack { height: 8px; background: rgba(231,238,252,0.10); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+	    .barfill { height: 100%; background: rgba(114,183,178,0.75); width: 0%; border-radius: 999px; }
+	    .barcount { color: rgba(231,238,252,0.85); font-weight: 900; }
+	  </style>
+	</head>
+	<body>
+	  <div class="container">
     <h1>WECARE 临床/专利/SCI 检索</h1>
     <div class="sub">
       <span style="opacity:.9">提示：点击菌株/功能等 chip 可快速筛选；关键词支持全字段模糊搜索；点“详情”查看完整字段；在 ADD 里新增后会自动出现在三大板块。</span>
     </div>
 
-    <div class="bar">
-      <div class="tabs" role="tablist" aria-label="sections">
-        <button class="tab active" data-tab="clinical" role="tab" aria-selected="true">临床</button>
-        <button class="tab" data-tab="patent" role="tab" aria-selected="false">专利</button>
-        <button class="tab" data-tab="sci" role="tab" aria-selected="false">SCI</button>
-        <button class="tab" data-tab="add" role="tab" aria-selected="false">ADD</button>
-      </div>
-      <span class="pill">临床 <strong id="count-clinical-total">83</strong></span>
-      <span class="pill">专利 <strong id="count-patent-total">213</strong></span>
-      <span class="pill">SCI <strong id="count-sci-total">108</strong></span>
+	    <div class="bar">
+	      <div class="tabs" role="tablist" aria-label="sections">
+	        <button class="tab active" data-tab="clinical" role="tab" aria-selected="true">临床</button>
+	        <button class="tab" data-tab="patent" role="tab" aria-selected="false">专利</button>
+	        <button class="tab" data-tab="sci" role="tab" aria-selected="false">SCI</button>
+	        <button class="tab" data-tab="analysis" role="tab" aria-selected="false">分析</button>
+	        <button class="tab" data-tab="add" role="tab" aria-selected="false">ADD</button>
+	      </div>
+	      <span class="pill">临床 <strong id="count-clinical-total">83</strong></span>
+	      <span class="pill">专利 <strong id="count-patent-total">213</strong></span>
+	      <span class="pill">SCI <strong id="count-sci-total">108</strong></span>
     </div>
 
     <section id="tab-clinical" class="tabpanel active" role="tabpanel" aria-label="临床">
@@ -338,14 +364,26 @@
       <div class="results"><div class="card-grid" id="results-patent"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
     </section>
 
-    <section id="tab-sci" class="tabpanel" role="tabpanel" aria-label="SCI">
-      <div class="toolbar" id="toolbar-sci"></div>
-      <div class="stats">
-        <span class="pill">当前显示 <strong id="count-sci-shown">108</strong> / <span id="count-sci-total2">108</span> 条</span>
-        <span class="filters" id="chips-sci"></span>
-      </div>
-      <div class="results"><div class="card-grid" id="results-sci"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
-    </section>
+	    <section id="tab-sci" class="tabpanel" role="tabpanel" aria-label="SCI">
+	      <div class="toolbar" id="toolbar-sci"></div>
+	      <div class="stats">
+	        <span class="pill">当前显示 <strong id="count-sci-shown">108</strong> / <span id="count-sci-total2">108</span> 条</span>
+	        <span class="filters" id="chips-sci"></span>
+	      </div>
+	      <div class="results"><div class="card-grid" id="results-sci"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
+	    </section>
+
+	    <section id="tab-analysis" class="tabpanel" role="tabpanel" aria-label="分析">
+	      <div class="toolbar" id="toolbar-analysis"></div>
+	      <div class="analysis-grid">
+	        <div class="results">
+	          <div class="barlist" id="analysis-left"><div class="empty">加载中…</div></div>
+	        </div>
+	        <div class="results">
+	          <div class="barlist" id="analysis-right"><div class="empty">加载中…</div></div>
+	        </div>
+	      </div>
+	    </section>
 
     <section id="tab-add" class="tabpanel" role="tabpanel" aria-label="ADD">
       <div class="add-wrap">
@@ -697,7 +735,7 @@
     document.getElementById('drawer-close').addEventListener('click', closeDrawer);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
 
-    function createFilterTable(opts) {
+	    function createFilterTable(opts) {
       const {
         key,
         label,
@@ -813,6 +851,7 @@
 	          html.push(`
 	            <div class="field">
 	              <label>${escapeHtml(f.label)}</label>
+	              ${f.hint ? `<div class="hint" style="margin-top:-2px;margin-bottom:6px;">${escapeHtml(f.hint)}</div>` : ``}
 	              <select id="${escapeHtml(f.id)}"></select>
 	              <div class="picked" id="${escapeHtml(f.id)}-picked"></div>
 	            </div>
@@ -887,7 +926,8 @@
 	        for (const f of filters) {
 	          const sel = state.selects.get(f.id);
 	          const set = new Set();
-	          for (const row of state.data) tokenizeForFilter(f, row[f.column]).forEach(t => set.add(t));
+	          const source = (f.optionsSource === 'base') ? baseData : state.data;
+	          for (const row of source) tokenizeForFilter(f, row[f.column]).forEach(t => set.add(t));
 	          const options = uniqueSorted(set);
 	          sel.innerHTML = '';
 	          sel.insertAdjacentHTML('beforeend', `<option value="">${escapeHtml('添加' + f.label + '…')}</option>`);
@@ -1041,16 +1081,325 @@
         renderCards(rows);
       }
 
-      function refresh() {
-        rebuildData();
-        initOptions();
-        applyAndRender();
-      }
+	      function refresh() {
+	        rebuildData();
+	        initOptions();
+	        applyAndRender();
+	      }
 
-      renderToolbar();
-      refresh();
-      return { refresh };
-    }
+	      renderToolbar();
+	      refresh();
+	      return {
+	        refresh,
+	        addToken: (filterId, token) => {
+	          if (!state.selects.has(filterId)) return;
+	          addSelected(filterId, token);
+	          applyAndRender();
+	        },
+	        clearAll: () => {
+	          clearSelected();
+	          state.queryRaw = '';
+	          state.queryTerms = [];
+	          const searchEl = document.getElementById(`${mountToolbarId}-search`);
+	          if (searchEl) searchEl.value = '';
+	          const multiEl = document.getElementById(`${mountToolbarId}-multi`);
+	          if (multiEl) multiEl.value = 'any';
+	          state.multiMode = 'any';
+	          applyAndRender();
+	        },
+	        getDataAll: () => state.data.slice(),
+	      };
+	    }
+
+	    function createAnalysis(opts) {
+	      const {
+	        tables,
+	        baseByKey,
+	        mountToolbarId,
+	        mountLeftId,
+	        mountRightId,
+	        activateTab,
+	      } = opts;
+
+	      const toolbarEl = document.getElementById(mountToolbarId);
+	      const leftEl = document.getElementById(mountLeftId);
+	      const rightEl = document.getElementById(mountRightId);
+
+	      const CONFIG = {
+	        clinical: {
+	          label: '临床',
+	          tab: 'clinical',
+	          fields: [
+	            { key: 'strain', label: '菌株', column: '菌株', tokenType: 'strainCode', tokenize: true, linkFilterId: 'clinical-strain' },
+	            { key: 'dir', label: '功能方向', column: '功能方向', tokenize: true, linkFilterId: 'clinical-dir' },
+	            { key: 'cat', label: '功能分类', column: '功能分类', tokenize: true, linkFilterId: 'clinical-cat' },
+	            { key: 'loc', label: 'Location', column: 'Location', tokenize: true },
+	          ],
+	          defaults: { group1: 'strain', group2: 'dir' },
+	        },
+	        patent: {
+	          label: '专利',
+	          tab: 'patent',
+	          fields: [
+	            { key: 'strainno', label: '菌株号', column: '菌株号', tokenize: true, linkFilterId: 'patent-strainno' },
+	            { key: 'species', label: '菌种名称', column: '菌株名称', tokenize: true, linkFilterId: 'patent-species' },
+	            { key: 'dir', label: '功能方向', column: '功能方向', tokenize: true, linkFilterId: 'patent-dir' },
+	            { key: 'app', label: '应用方向', column: '应用方向', tokenize: true },
+	            { key: 'status', label: '法律状态', column: '法律状态', tokenize: true },
+	          ],
+	          defaults: { group1: 'strainno', group2: 'dir' },
+	        },
+	        sci: {
+	          label: 'SCI',
+	          tab: 'sci',
+	          fields: [
+	            { key: 'strain', label: '菌株', column: '菌株', tokenize: true, linkFilterId: 'sci-strain' },
+	            { key: 'func', label: '功能', column: '功能', tokenize: true, linkFilterId: 'sci-func' },
+	            { key: 'cat', label: '分类', column: '分类', tokenize: true, linkFilterId: 'sci-cat' },
+	            { key: 'year', label: '发表年份', column: '发表时间', tokenize: false },
+	          ],
+	          defaults: { group1: 'strain', group2: 'func' },
+	        },
+	      };
+
+	      function isEmptyToken(s) {
+	        const v = String(s ?? '').trim();
+	        if (!v) return true;
+	        return v === '/' || v === '-' || v === '—' || v === '–' || v.toLowerCase() === 'na' || v.toLowerCase() === 'n/a';
+	      }
+
+	      function valuesFor(row, field) {
+	        if (!field) return [];
+	        if (field.key === 'year') {
+	          const t = String(row[field.column] ?? '').trim();
+	          if (!t) return [];
+	          const m = t.match(/^(\d{4})/);
+	          return m ? [m[1]] : [];
+	        }
+	        const raw = row[field.column];
+	        if (field.tokenize === false) {
+	          const v = String(raw ?? '').trim();
+	          return isEmptyToken(v) ? [] : [v];
+	        }
+	        const tokens = tokenizeForFilter({ tokenType: field.tokenType || '' }, raw);
+	        return tokens.map(t => String(t).trim()).filter(t => !isEmptyToken(t));
+	      }
+
+	      function countBy(data, field) {
+	        const m = new Map();
+	        for (const row of data) {
+	          for (const v of valuesFor(row, field)) {
+	            m.set(v, (m.get(v) || 0) + 1);
+	          }
+	        }
+	        return Array.from(m.entries()).sort((a, b) => b[1] - a[1]);
+	      }
+
+	      function rowHasValue(row, field, value) {
+	        const vs = valuesFor(row, field);
+	        return vs.includes(value);
+	      }
+
+	      const state = {
+	        dataset: 'clinical',
+	        group1: CONFIG.clinical.defaults.group1,
+	        group2: CONFIG.clinical.defaults.group2,
+	        focus: '',
+	        topN: 30,
+	        q: '',
+	      };
+
+	      function getFields() {
+	        return CONFIG[state.dataset].fields;
+	      }
+
+	      function getField(key) {
+	        return getFields().find(f => f.key === key);
+	      }
+
+	      function getAllData(datasetKey) {
+	        const base = baseByKey[datasetKey] || [];
+	        const added = loadAllAdded()[datasetKey] || [];
+	        return withAdded(base, added);
+	      }
+
+	      function renderToolbar() {
+	        const cfg = CONFIG[state.dataset];
+	        const fields = cfg.fields;
+	        const groupOpts = fields.map(f => `<option value="${escapeHtml(f.key)}">${escapeHtml(f.label)}</option>`).join('');
+
+	        toolbarEl.innerHTML = `
+	          <div class="field">
+	            <label>数据板块</label>
+	            <select id="${escapeHtml(mountToolbarId)}-ds">
+	              <option value="clinical">临床</option>
+	              <option value="patent">专利</option>
+	              <option value="sci">SCI</option>
+	            </select>
+	          </div>
+	          <div class="field">
+	            <label>统计维度（第1层）</label>
+	            <select id="${escapeHtml(mountToolbarId)}-g1">${groupOpts}</select>
+	          </div>
+	          <div class="field">
+	            <label>细分维度（第2层）</label>
+	            <select id="${escapeHtml(mountToolbarId)}-g2">
+	              <option value="">（不细分）</option>
+	              ${groupOpts}
+	            </select>
+	          </div>
+	          <div class="field">
+	            <label>Top</label>
+	            <select id="${escapeHtml(mountToolbarId)}-top">
+	              <option value="20">20</option>
+	              <option value="30">30</option>
+	              <option value="50">50</option>
+	              <option value="100">100</option>
+	            </select>
+	          </div>
+	          <div class="field">
+	            <label>搜索（过滤统计项）</label>
+	            <input id="${escapeHtml(mountToolbarId)}-q" type="text" placeholder="输入关键词过滤统计项…" />
+	          </div>
+	          <button class="btn" id="${escapeHtml(mountToolbarId)}-reset">重置</button>
+	        `;
+
+	        const dsEl = document.getElementById(`${mountToolbarId}-ds`);
+	        const g1El = document.getElementById(`${mountToolbarId}-g1`);
+	        const g2El = document.getElementById(`${mountToolbarId}-g2`);
+	        const topEl = document.getElementById(`${mountToolbarId}-top`);
+	        const qEl = document.getElementById(`${mountToolbarId}-q`);
+	        const resetEl = document.getElementById(`${mountToolbarId}-reset`);
+
+	        dsEl.value = state.dataset;
+	        g1El.value = state.group1;
+	        g2El.value = state.group2 || '';
+	        topEl.value = String(state.topN);
+	        qEl.value = state.q;
+
+	        dsEl.addEventListener('change', () => {
+	          state.dataset = dsEl.value;
+	          const d = CONFIG[state.dataset].defaults;
+	          state.group1 = d.group1;
+	          state.group2 = d.group2;
+	          state.focus = '';
+	          state.q = '';
+	          renderToolbar();
+	          render();
+	        });
+	        g1El.addEventListener('change', () => { state.group1 = g1El.value; state.focus = ''; render(); });
+	        g2El.addEventListener('change', () => { state.group2 = g2El.value; render(); });
+	        topEl.addEventListener('change', () => { state.topN = Number(topEl.value) || 30; render(); });
+	        qEl.addEventListener('input', () => { state.q = qEl.value.trim().toLowerCase(); render(); });
+	        resetEl.addEventListener('click', () => {
+	          const d = CONFIG[state.dataset].defaults;
+	          state.group1 = d.group1;
+	          state.group2 = d.group2;
+	          state.focus = '';
+	          state.topN = 30;
+	          state.q = '';
+	          renderToolbar();
+	          render();
+	        });
+	      }
+
+	      function barRowHtml(name, count, max, active) {
+	        const w = max ? Math.round((count / max) * 100) : 0;
+	        return `
+	          <div class="barrow ${active ? 'active' : ''}" data-name="${escapeHtml(name)}">
+	            <div>
+	              <div class="barname">${escapeHtml(name)}</div>
+	              <div class="barhint">${escapeHtml(CONFIG[state.dataset].label)} · ${count} 条</div>
+	              <div class="bartrack"><div class="barfill" style="width:${w}%"></div></div>
+	            </div>
+	            <div class="barcount">${count}</div>
+	          </div>
+	        `;
+	      }
+
+	      function render() {
+	        const cfg = CONFIG[state.dataset];
+	        const data = getAllData(state.dataset);
+	        const f1 = getField(state.group1);
+	        const f2 = state.group2 ? getField(state.group2) : null;
+
+	        const list = countBy(data, f1)
+	          .filter(([name]) => !state.q || String(name).toLowerCase().includes(state.q))
+	          .slice(0, state.topN);
+
+	        const max = list.length ? list[0][1] : 0;
+	        leftEl.innerHTML = `
+	          <div class="rowline" style="justify-content: space-between;">
+	            <div style="font-weight:900;">${escapeHtml(cfg.label)}｜按「${escapeHtml(f1 ? f1.label : '')}」统计</div>
+	            <div class="hint">点击条目查看细分/联动筛选</div>
+	          </div>
+	          ${list.length ? list.map(([n, c]) => barRowHtml(n, c, max, n === state.focus)).join('') : `<div class="empty">无可统计项</div>`}
+	        `;
+
+	        leftEl.querySelectorAll('[data-name]').forEach(el => {
+	          el.addEventListener('click', () => {
+	            const name = el.getAttribute('data-name') || '';
+	            state.focus = (state.focus === name) ? '' : name;
+	            render();
+	          });
+	        });
+
+	        if (!state.focus) {
+	          rightEl.innerHTML = `
+	            <div class="rowline" style="justify-content: space-between;">
+	              <div style="font-weight:900;">细分</div>
+	              <div class="hint">先在左侧点一个条目</div>
+	            </div>
+	            <div class="empty">未选择第1层条目。</div>
+	          `;
+	          return;
+	        }
+
+	        const subset = data.filter(row => rowHasValue(row, f1, state.focus));
+
+	        if (!f2 || f2.key === f1.key) {
+	          rightEl.innerHTML = `
+	            <div class="rowline" style="justify-content: space-between;">
+	              <div style="font-weight:900;">${escapeHtml(f1.label)}：${escapeHtml(state.focus)}</div>
+	              <button class="btn primary" id="${escapeHtml(mountToolbarId)}-apply">应用到筛选</button>
+	            </div>
+	            <div class="hint">该条目在 ${escapeHtml(cfg.label)} 中共有 ${subset.length} 条记录。</div>
+	          `;
+	        } else {
+	          const list2 = countBy(subset, f2).slice(0, state.topN);
+	          const max2 = list2.length ? list2[0][1] : 0;
+	          rightEl.innerHTML = `
+	            <div class="rowline" style="justify-content: space-between;">
+	              <div style="font-weight:900;">${escapeHtml(f1.label)}：${escapeHtml(state.focus)}｜细分「${escapeHtml(f2.label)}」</div>
+	              <button class="btn primary" id="${escapeHtml(mountToolbarId)}-apply">应用到筛选</button>
+	            </div>
+	            <div class="hint">该条目在 ${escapeHtml(cfg.label)} 中共有 ${subset.length} 条记录。</div>
+	            ${list2.length ? list2.map(([n, c]) => barRowHtml(n, c, max2, false)).join('') : `<div class="empty">无可细分项</div>`}
+	          `;
+	        }
+
+	        const applyBtn = document.getElementById(`${mountToolbarId}-apply`);
+	        if (applyBtn) {
+	          applyBtn.addEventListener('click', () => {
+	            const table = tables[state.dataset];
+	            if (!table) return;
+	            const lf = f1 && f1.linkFilterId ? f1.linkFilterId : '';
+	            if (lf) {
+	              table.addToken(lf, state.focus);
+	            }
+	            activateTab(cfg.tab);
+	          });
+	        }
+	      }
+
+	      function refresh() {
+	        renderToolbar();
+	        render();
+	      }
+
+	      refresh();
+	      return { refresh };
+	    }
 
     try {
       // Tabs
@@ -1059,14 +1408,20 @@
         clinical: document.getElementById('tab-clinical'),
         patent: document.getElementById('tab-patent'),
         sci: document.getElementById('tab-sci'),
+        analysis: document.getElementById('tab-analysis'),
         add: document.getElementById('tab-add'),
       };
+      function activateTab(key) {
+        const btn = tabs.find(b => b.getAttribute('data-tab') === key);
+        if (!btn) return;
+        tabs.forEach(b => b.classList.toggle('active', b === btn));
+        tabs.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+        Object.entries(panels).forEach(([k, el]) => el.classList.toggle('active', k === key));
+      }
       tabs.forEach(btn => {
         btn.addEventListener('click', () => {
           const key = btn.getAttribute('data-tab');
-          tabs.forEach(b => b.classList.toggle('active', b === btn));
-          tabs.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
-          Object.entries(panels).forEach(([k, el]) => el.classList.toggle('active', k === key));
+          activateTab(key);
         });
       });
 
@@ -1120,7 +1475,7 @@
           ],
         },
         filters: [
-          { id: 'clinical-strain', label: '菌株', column: '菌株', allLabel: '全部菌株', tokenType: 'strainCode' },
+          { id: 'clinical-strain', label: '临床菌株', column: '菌株', tokenType: 'strainCode', optionsSource: 'base', hint: '仅显示菌株号（过滤配方名/长文本）' },
           { id: 'clinical-cat', label: '功能分类', column: '功能分类', allLabel: '全部功能分类' },
           { id: 'clinical-dir', label: '功能方向', column: '功能方向', allLabel: '全部功能方向' },
         ],
@@ -1202,13 +1557,21 @@
         ],
       });
 
-      // --- ADD tab ---
-      const tables = { clinical: clinicalTable, patent: patentTable, sci: sciTable };
-      const colsByKey = { clinical: clinicalCols, patent: patentCols, sci: sciCols };
+	      // --- ADD tab ---
+	      const tables = { clinical: clinicalTable, patent: patentTable, sci: sciTable };
+	      const colsByKey = { clinical: clinicalCols, patent: patentCols, sci: sciCols };
+	      const analysisPanel = createAnalysis({
+	        tables,
+	        baseByKey: { clinical: clinicalData, patent: patentData, sci: sciData },
+	        mountToolbarId: 'toolbar-analysis',
+	        mountLeftId: 'analysis-left',
+	        mountRightId: 'analysis-right',
+	        activateTab,
+	      });
 
-      const addTarget = document.getElementById('add-target');
-      const addFormEl = document.getElementById('add-form');
-      const addedListEl = document.getElementById('added-list');
+	      const addTarget = document.getElementById('add-target');
+	      const addFormEl = document.getElementById('add-form');
+	      const addedListEl = document.getElementById('added-list');
 
       function isLongField(name) {
         return /指标|题目|总结|结论|Ciation|主权项|内容|说明|备注|Clinical|Title/i.test(name);
@@ -1299,6 +1662,7 @@
               renderAddedList();
               tables[key].refresh();
               refreshTopCounts();
+              analysisPanel.refresh();
             } catch (err) {
               alert('删除失败：' + String(err && (err.message || err)));
             }
@@ -1323,6 +1687,7 @@
           renderAddedList();
           tables[key].refresh();
           refreshTopCounts();
+          analysisPanel.refresh();
         } catch (err) {
           alert('保存失败：' + String(err && (err.message || err)));
         }
@@ -1342,6 +1707,7 @@
           renderAddedList();
           tables[key].refresh();
           refreshTopCounts();
+          analysisPanel.refresh();
         } catch (err) {
           alert('清空失败：' + String(err && (err.message || err)));
         }
@@ -1377,6 +1743,7 @@
           patentTable.refresh();
           sciTable.refresh();
           refreshTopCounts();
+          analysisPanel.refresh();
           alert('导入成功。');
         } catch (err) {
           alert('导入失败：' + String(err && (err.message || err)));
@@ -1399,6 +1766,7 @@
         patentTable.refresh();
         sciTable.refresh();
         renderAddedList();
+        analysisPanel.refresh();
       });
     } catch (e) {
       showError(e);
