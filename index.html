@@ -6,166 +6,343 @@
   <title>WECARE 临床/专利/SCI 检索</title>
   <style>
     :root {
-      --bg: #0b1220;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.08);
-      --text: #e7eefc;
-      --muted: rgba(231,238,252,0.7);
-      --border: rgba(231,238,252,0.14);
-      --accent: #72B7B2;
-      --accent2: #F2CC60;
-      --danger: #E76F51;
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --ok: #8bd3dd;
+      --bg: #f6f7fb;
+      --panel: rgba(255,255,255,0.92);
+      --panel2: rgba(255,255,255,0.72);
+      --panelSolid: #ffffff;
+      --text: #0f172a;
+      --muted: rgba(15,23,42,0.62);
+      --border: rgba(15,23,42,0.10);
+      --border2: rgba(15,23,42,0.14);
+      /* WECARE red/gray — bright & soft */
+      --brand1: #dc2626; /* red */
+      --brand2: #ef4444; /* bright red */
+      --brand3: #fb7185; /* soft rose */
+      --accent: var(--brand2);
+      --accent2: var(--brand3);
+      --danger: #dc2626;
+      --ok: #0ea5e9;
+      --shadow: 0 18px 48px rgba(15,23,42,0.12);
+      --shadow2: 0 10px 28px rgba(15,23,42,0.10);
+      --ring: 0 0 0 4px rgba(239,68,68,0.18);
+      --radius: 16px;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 22px;
-      background: radial-gradient(1200px 600px at 20% -10%, rgba(114,183,178,0.22), transparent 55%),
-                  radial-gradient(900px 600px at 90% 10%, rgba(242,204,96,0.18), transparent 60%),
-                  var(--bg);
+      padding: 28px;
+      background:
+        radial-gradient(1100px 640px at 10% -10%, rgba(239,68,68,0.18), transparent 58%),
+        radial-gradient(1200px 640px at 22% -10%, rgba(251,113,133,0.14), transparent 58%),
+        radial-gradient(900px 620px at 92% 8%, rgba(239,68,68,0.12), transparent 60%),
+        radial-gradient(1000px 520px at 40% 110%, rgba(100,116,139,0.10), transparent 60%),
+        linear-gradient(180deg, #f8fafc, var(--bg));
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    .container { max-width: 1440px; margin: 0 auto; }
-    h1 { font-size: 20px; margin: 0 0 6px 0; font-weight: 800; letter-spacing: .2px; }
-    .sub { color: var(--muted); margin-bottom: 14px; line-height: 1.45; }
+    .container { max-width: 1480px; margin: 0 auto; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background:
+        linear-gradient(rgba(255,255,255,0.74), rgba(255,255,255,0.74)) padding-box,
+        linear-gradient(135deg, rgba(239,68,68,0.34), rgba(251,113,133,0.26), rgba(100,116,139,0.20)) border-box;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+      overflow: hidden;
+    }
+    .topbar::after {
+      content: "WECARE";
+      position: absolute;
+      right: 14px;
+      bottom: -10px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      font-size: 52px;
+      color: rgba(15,23,42,0.06);
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      z-index: 0;
+    }
+    .topbar > * { position: relative; z-index: 1; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 280px;
+    }
+    .logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.0) 60%),
+                  linear-gradient(135deg, rgba(220,38,38,0.95), rgba(239,68,68,0.92), rgba(251,113,133,0.90));
+      box-shadow: 0 14px 28px rgba(239,68,68,0.14);
+      border: 1px solid rgba(255,255,255,0.55);
+      position: relative;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      inset: 8px 9px 9px 9px;
+      border-radius: 10px;
+      background: radial-gradient(12px 12px at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.0) 62%);
+      opacity: .75;
+      pointer-events: none;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: 950;
+      letter-spacing: .2px;
+      line-height: 1.15;
+    }
+    .wordmark {
+      background: linear-gradient(135deg, rgba(220,38,38,0.98), rgba(239,68,68,0.98), rgba(251,113,133,0.98));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 1000;
+      letter-spacing: .3px;
+    }
+    .title-rest { color: rgba(15,23,42,0.92); }
+    .sub {
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.45;
+      font-size: 12px;
+    }
+    .brand-text { display: flex; flex-direction: column; }
+
+    .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 10px; border-radius: 999px;
+      border: 1px solid var(--border); background: rgba(15,23,42,0.04);
+      font-size: 12px; color: var(--muted);
+    }
+    .pill strong { color: var(--text); }
+    .pill.red { border-color: rgba(239,68,68,0.20); background: rgba(239,68,68,0.10); }
+    .pill.rose { border-color: rgba(251,113,133,0.20); background: rgba(251,113,133,0.10); }
+    .pill.slate { border-color: rgba(100,116,139,0.20); background: rgba(100,116,139,0.10); }
+
+    .header {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background:
+        linear-gradient(rgba(255,255,255,0.62), rgba(255,255,255,0.62)) padding-box,
+        linear-gradient(135deg, rgba(239,68,68,0.20), rgba(251,113,133,0.16), rgba(100,116,139,0.14)) border-box;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(10px);
+    }
     .bar {
       display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-      padding: 12px 14px; background: var(--panel); border: 1px solid var(--border);
-      border-radius: 14px; box-shadow: var(--shadow); margin: 12px 0 14px;
+      padding: 12px 14px;
+      margin: 0;
     }
     .tabs { display: flex; gap: 10px; flex-wrap: wrap; }
     .tab {
-      appearance: none; border: 1px solid var(--border); background: rgba(255,255,255,0.04);
-      color: var(--text); padding: 9px 12px; border-radius: 999px; cursor: pointer;
-      font-weight: 700; letter-spacing: .2px;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.78);
+      color: rgba(15,23,42,0.82);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: .15px;
+      transition: transform .12s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease;
     }
-    .tab.active { border-color: rgba(114,183,178,0.7); background: rgba(114,183,178,0.18); }
+    .tab:hover { border-color: var(--border2); box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
+    .tab.active {
+      border-color: rgba(239,68,68,0.22);
+      background: linear-gradient(180deg, rgba(239,68,68,0.14), rgba(251,113,133,0.10), rgba(100,116,139,0.06));
+      color: rgba(15,23,42,0.92);
+    }
     .tabpanel { display: none; }
     .tabpanel.active { display: block; }
-
-	    .toolbar {
-	      display: grid;
-	      grid-template-columns: 1fr 1fr 1fr .9fr 1.3fr auto auto;
-	      gap: 10px;
-	      padding: 14px;
-	      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      margin-bottom: 12px;
-    }
-    @media (max-width: 1100px) {
-      .toolbar { grid-template-columns: 1fr 1fr 1fr; }
-    }
-    @media (max-width: 720px) {
-      .toolbar { grid-template-columns: 1fr; }
-    }
     .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-    select, input[type="text"] {
+    select, input[type="text"], input[type="password"], textarea {
       width: 100%;
       padding: 10px 10px;
       border-radius: 10px;
       border: 1px solid var(--border);
-      background: rgba(0,0,0,0.25);
+      background: rgba(255,255,255,0.92);
       color: var(--text);
       outline: none;
+      transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
     }
-    input[type="text"]::placeholder { color: rgba(231,238,252,0.45); }
+    textarea { min-height: 92px; resize: vertical; }
+    select:focus, input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+      border-color: rgba(239,68,68,0.35);
+      box-shadow: var(--ring);
+    }
+    input[type="text"]::placeholder, input[type="password"]::placeholder, textarea::placeholder { color: rgba(15,23,42,0.45); }
     .btn {
       appearance: none;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
+      background: rgba(255,255,255,0.86);
+      color: rgba(15,23,42,0.88);
       padding: 10px 12px;
       border-radius: 10px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: .2px;
       height: 40px;
       align-self: end;
+      transition: transform .12s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease;
     }
-    .btn.primary { border-color: rgba(114,183,178,0.65); background: rgba(114,183,178,0.15); }
+    .btn:hover { border-color: var(--border2); box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
+    .btn.primary {
+      border-color: rgba(239,68,68,0.35);
+      background: linear-gradient(135deg, rgba(220,38,38,0.94), rgba(239,68,68,0.92), rgba(251,113,133,0.90));
+      color: white;
+      box-shadow: 0 14px 34px rgba(239,68,68,0.16);
+    }
+    .btn.primary:hover { box-shadow: 0 16px 44px rgba(239,68,68,0.22); }
     .btn:active { transform: translateY(1px); }
     .stats { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
-    .pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 10px; border-radius: 999px;
-      border: 1px solid var(--border); background: rgba(0,0,0,0.25);
-      font-size: 12px; color: var(--muted);
-    }
-    .pill strong { color: var(--text); }
     .filters { display: inline-flex; gap: 8px; flex-wrap: wrap; }
 	    .chip {
 	      display: inline-flex; align-items: center; gap: 6px;
 	      padding: 7px 10px; border-radius: 999px;
-	      border: 1px solid rgba(114,183,178,0.5);
-	      background: rgba(114,183,178,0.14);
-	      font-size: 12px; color: var(--text);
+	      border: 1px solid rgba(100,116,139,0.22);
+	      background: rgba(100,116,139,0.08);
+	      font-size: 12px;
+	      color: rgba(15,23,42,0.88);
 	    }
 	    .picked { margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap; }
-	    .chip.chip-picked { border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.14); }
+	    .chip.chip-picked { border-color: rgba(251,113,133,0.22); background: rgba(251,113,133,0.10); }
 	    .chip-x {
 	      appearance: none;
 	      border: 0;
 	      background: transparent;
-	      color: rgba(231,238,252,0.8);
+	      color: rgba(15,23,42,0.62);
 	      cursor: pointer;
 	      font-weight: 900;
 	      line-height: 1;
 	      padding: 0 4px;
 	    }
 	    .chip-x:hover { color: var(--text); }
+	    .chip-clinical-strain { border-color: rgba(239,68,68,0.24); background: rgba(239,68,68,0.10); }
+	    .chip-sci-strain { border-color: rgba(251,113,133,0.26); background: rgba(251,113,133,0.10); }
+	    .chip-clinical-dir, .chip-patent-dir { border-color: rgba(251,113,133,0.26); background: rgba(251,113,133,0.10); }
+	    .chip-clinical-cat, .chip-sci-cat { border-color: rgba(100,116,139,0.22); background: rgba(100,116,139,0.10); }
+	    .chip-patent-strainno { border-color: rgba(220,38,38,0.20); background: rgba(220,38,38,0.10); }
+	    .chip-patent-species, .chip-sci-func { border-color: rgba(239,68,68,0.18); background: rgba(239,68,68,0.08); }
     .results {
-      background: var(--panel);
+      background: var(--panelSolid);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
       overflow: hidden;
     }
+
+    .tab-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 14px;
+      margin-top: 14px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .tab-layout { grid-template-columns: 1fr; }
+    }
+    .side {
+      position: sticky;
+      top: 96px;
+    }
+    @media (max-width: 1100px) {
+      .side { position: static; }
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      backdrop-filter: blur(10px);
+      background:
+        linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(135deg, rgba(239,68,68,0.16), rgba(251,113,133,0.12), rgba(100,116,139,0.10)) border-box;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      margin-bottom: 0;
+    }
+    .toolbar .btn { align-self: stretch; }
+    .side .panel { max-height: calc(100vh - 120px); overflow: auto; }
+    .side .panel::-webkit-scrollbar { width: 10px; }
+    .side .panel::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.10); border-radius: 999px; border: 3px solid rgba(255,255,255,0.0); }
+    .side .panel::-webkit-scrollbar-track { background: transparent; }
     .table-wrap { overflow: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 900px; }
     thead th {
       text-align: left; font-size: 12px; color: var(--muted);
       padding: 10px 12px; border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
+      background: rgba(15,23,42,0.03);
       position: sticky; top: 0; backdrop-filter: blur(6px);
       white-space: nowrap;
     }
     tbody td {
-      padding: 10px 12px; border-bottom: 1px solid rgba(231,238,252,0.08);
+      padding: 10px 12px; border-bottom: 1px solid rgba(15,23,42,0.06);
       vertical-align: top; line-height: 1.35;
     }
-    tbody tr:hover td { background: rgba(114,183,178,0.06); }
-    a { color: var(--ok); text-decoration: none; }
+    tbody tr:hover td { background: rgba(37,99,235,0.05); }
+    a { color: rgba(220,38,38,0.98); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .empty { padding: 16px; color: var(--muted); }
     .footer { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.45; }
-    code { background: rgba(0,0,0,0.25); border: 1px solid rgba(231,238,252,0.12); padding: 0 6px; border-radius: 6px; }
+    code { background: rgba(15,23,42,0.06); border: 1px solid rgba(15,23,42,0.10); padding: 0 6px; border-radius: 6px; }
 
     /* --- Card View (better than wide tables) --- */
-    .btn.danger { border-color: rgba(231,111,81,0.6); background: rgba(231,111,81,0.12); }
+    .btn.danger { border-color: rgba(220,38,38,0.35); background: rgba(220,38,38,0.10); color: rgba(127,29,29,0.95); }
     .card-grid {
       padding: 12px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
+    @media (min-width: 1400px) {
+      .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
     @media (max-width: 1100px) {
       .card-grid { grid-template-columns: 1fr; }
     }
     .card {
-      border: 1px solid rgba(231,238,252,0.12);
-      background: rgba(0,0,0,0.18);
-      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.98);
+      border-radius: var(--radius);
       padding: 12px 12px;
       overflow: hidden;
+      box-shadow: 0 10px 28px rgba(15,23,42,0.06);
+      transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
     }
     .card:hover {
-      border-color: rgba(114,183,178,0.5);
-      background: rgba(0,0,0,0.22);
+      border-color: rgba(37,99,235,0.22);
+      box-shadow: 0 18px 44px rgba(15,23,42,0.10);
+      transform: translateY(-1px);
     }
     .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .card-title { font-weight: 900; letter-spacing: .15px; line-height: 1.25; }
@@ -174,20 +351,20 @@
       padding: 4px 8px;
       border-radius: 999px;
       font-size: 12px;
-      border: 1px solid rgba(231,238,252,0.16);
-      color: rgba(231,238,252,0.85);
-      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(15,23,42,0.10);
+      color: rgba(15,23,42,0.70);
+      background: rgba(15,23,42,0.03);
       white-space: nowrap;
       margin-right: 8px;
     }
     .tag.added {
-      border-color: rgba(242,204,96,0.5);
-      background: rgba(242,204,96,0.12);
-      color: rgba(242,204,96,0.95);
+      border-color: rgba(124,58,237,0.26);
+      background: rgba(124,58,237,0.10);
+      color: rgba(88,28,135,0.95);
     }
     mark {
-      background: rgba(242,204,96,0.22);
-      color: var(--text);
+      background: rgba(253,224,71,0.60);
+      color: rgba(15,23,42,0.95);
       padding: 0 2px;
       border-radius: 4px;
     }
@@ -197,30 +374,31 @@
       cursor: pointer;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(114,183,178,0.45);
-      background: rgba(114,183,178,0.16);
-      color: var(--text);
+      border: 1px solid rgba(37,99,235,0.22);
+      background: rgba(37,99,235,0.10);
+      color: rgba(15,23,42,0.85);
       font-size: 12px;
       line-height: 1;
+      transition: background .15s ease, border-color .15s ease, transform .12s ease;
     }
-    .chip-btn:hover { background: rgba(114,183,178,0.24); }
+    .chip-btn:hover { background: rgba(37,99,235,0.14); border-color: rgba(37,99,235,0.28); }
     .meta {
       margin-top: 10px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 6px 10px;
-      color: rgba(231,238,252,0.78);
+      color: rgba(15,23,42,0.78);
       font-size: 12px;
     }
     @media (max-width: 720px) {
       .meta { grid-template-columns: 1fr; }
     }
     .kv { display: flex; gap: 8px; align-items: baseline; }
-    .k { color: rgba(231,238,252,0.55); min-width: 64px; }
-    .v { color: rgba(231,238,252,0.86); overflow-wrap: anywhere; }
+    .k { color: rgba(15,23,42,0.55); min-width: 64px; }
+    .v { color: rgba(15,23,42,0.88); overflow-wrap: anywhere; }
     .snippet {
       margin-top: 10px;
-      color: rgba(231,238,252,0.72);
+      color: rgba(15,23,42,0.70);
       font-size: 12px;
       line-height: 1.45;
       white-space: pre-wrap;
@@ -234,16 +412,16 @@
     /* Drawer */
     .drawer-mask {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(15,23,42,0.45);
       display: none;
       z-index: 50;
     }
     .drawer-mask.show { display: block; }
     .drawer {
       position: fixed; top: 0; right: 0; height: 100vh; width: min(860px, 96vw);
-      background: rgba(11,18,32,0.96);
-      border-left: 1px solid rgba(231,238,252,0.14);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      background: rgba(255,255,255,0.98);
+      border-left: 1px solid rgba(15,23,42,0.10);
+      box-shadow: 0 24px 70px rgba(15,23,42,0.20);
       transform: translateX(100%);
       transition: transform .18s ease-out;
       z-index: 60;
@@ -253,7 +431,7 @@
     .drawer.show { transform: translateX(0); }
     .drawer-head {
       padding: 14px 14px 10px 14px;
-      border-bottom: 1px solid rgba(231,238,252,0.12);
+      border-bottom: 1px solid rgba(15,23,42,0.08);
       display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
     }
     .drawer-title { font-weight: 900; line-height: 1.25; }
@@ -263,23 +441,17 @@
       .dl { grid-template-columns: 1fr; }
       .dt { font-weight: 800; }
     }
-    .dt { color: rgba(231,238,252,0.55); font-size: 12px; }
-    .dd { color: rgba(231,238,252,0.90); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .dt { color: rgba(15,23,42,0.55); font-size: 12px; }
+    .dd { color: rgba(15,23,42,0.90); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
 
     /* ADD */
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      padding: 14px;
-    }
+    /* (panel moved to shared styles above) */
     .add-wrap { display: grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
     @media (max-width: 1100px) {
       .add-wrap { grid-template-columns: 1fr; }
     }
     .rowline { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .hint { font-size: 12px; color: rgba(231,238,252,0.7); line-height: 1.4; }
+    .hint { font-size: 12px; color: rgba(15,23,42,0.62); line-height: 1.4; }
     .add-form {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -291,13 +463,13 @@
     }
     .added-list { margin-top: 10px; display: grid; gap: 10px; }
     .added-item {
-      border: 1px solid rgba(231,238,252,0.12);
-      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(15,23,42,0.10);
+      background: rgba(255,255,255,0.92);
       border-radius: 12px;
       padding: 10px 10px;
     }
 	    .added-item .t { font-weight: 800; margin-bottom: 6px; }
-	    .added-item .m { color: rgba(231,238,252,0.75); font-size: 12px; }
+	    .added-item .m { color: rgba(15,23,42,0.62); font-size: 12px; }
 	    .added-item .a { margin-top: 8px; display: flex; gap: 10px; }
 
 	    /* Analysis */
@@ -311,77 +483,120 @@
 	      grid-template-columns: 1fr auto;
 	      gap: 10px;
 	      align-items: center;
-	      border: 1px solid rgba(231,238,252,0.12);
-	      background: rgba(0,0,0,0.16);
+	      border: 1px solid rgba(15,23,42,0.10);
+	      background: rgba(255,255,255,0.92);
 	      border-radius: 12px;
 	      padding: 10px 10px;
 	      cursor: pointer;
+	      box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+	      transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
 	    }
-	    .barrow:hover { border-color: rgba(114,183,178,0.5); background: rgba(0,0,0,0.22); }
-	    .barrow.active { border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.10); }
+	    .barrow:hover { border-color: rgba(37,99,235,0.22); transform: translateY(-1px); box-shadow: 0 16px 40px rgba(15,23,42,0.10); }
+	    .barrow.active { border-color: rgba(124,58,237,0.22); background: rgba(124,58,237,0.08); }
 	    .barname { font-weight: 850; }
-	    .barhint { color: rgba(231,238,252,0.65); font-size: 12px; margin-top: 3px; }
-	    .bartrack { height: 8px; background: rgba(231,238,252,0.10); border-radius: 999px; overflow: hidden; margin-top: 6px; }
-	    .barfill { height: 100%; background: rgba(114,183,178,0.75); width: 0%; border-radius: 999px; }
-	    .barcount { color: rgba(231,238,252,0.85); font-weight: 900; }
-	  </style>
+	    .barhint { color: rgba(15,23,42,0.62); font-size: 12px; margin-top: 3px; }
+	    .bartrack { height: 8px; background: rgba(15,23,42,0.08); border-radius: 999px; overflow: hidden; margin-top: 6px; }
+	    .barfill { height: 100%; background: rgba(37,99,235,0.75); width: 0%; border-radius: 999px; }
+	    .barcount { color: rgba(15,23,42,0.85); font-weight: 900; }
+  </style>
 	</head>
 	<body>
 	  <div class="container">
-    <h1>WECARE 临床/专利/SCI 检索</h1>
-    <div class="sub">
-      <span style="opacity:.9">提示：点击菌株/功能等 chip 可快速筛选；关键词支持全字段模糊搜索；点“详情”查看完整字段；在 ADD 里新增后会自动出现在三大板块。</span>
-    </div>
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div class="brand-text">
+            <h1><span class="wordmark">WECARE</span><span class="title-rest"> 临床/专利/SCI 检索</span></h1>
+            <div class="sub">提示：点击菌株/功能等 chip 可快速筛选；关键词支持全字段模糊搜索；点“详情”查看完整字段；在 ADD 里新增后会自动出现在三大板块。</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="pill red">临床 <strong id="count-clinical-total">83</strong></span>
+          <span class="pill rose">专利 <strong id="count-patent-total">213</strong></span>
+          <span class="pill slate">SCI <strong id="count-sci-total">108</strong></span>
+        </div>
+      </div>
 
-	    <div class="bar">
-	      <div class="tabs" role="tablist" aria-label="sections">
-	        <button class="tab active" data-tab="clinical" role="tab" aria-selected="true">临床</button>
-	        <button class="tab" data-tab="patent" role="tab" aria-selected="false">专利</button>
-	        <button class="tab" data-tab="sci" role="tab" aria-selected="false">SCI</button>
-	        <button class="tab" data-tab="analysis" role="tab" aria-selected="false">分析</button>
-	        <button class="tab" data-tab="add" role="tab" aria-selected="false">ADD</button>
-	      </div>
-	      <span class="pill">临床 <strong id="count-clinical-total">83</strong></span>
-	      <span class="pill">专利 <strong id="count-patent-total">213</strong></span>
-	      <span class="pill">SCI <strong id="count-sci-total">108</strong></span>
-    </div>
+      <div class="header">
+        <div class="bar">
+          <div class="tabs" role="tablist" aria-label="sections">
+            <button class="tab active" data-tab="clinical" role="tab" aria-selected="true">临床</button>
+            <button class="tab" data-tab="patent" role="tab" aria-selected="false">专利</button>
+            <button class="tab" data-tab="sci" role="tab" aria-selected="false">SCI</button>
+            <button class="tab" data-tab="analysis" role="tab" aria-selected="false">分析</button>
+            <button class="tab" data-tab="add" role="tab" aria-selected="false">ADD</button>
+          </div>
+        </div>
+      </div>
 
     <section id="tab-clinical" class="tabpanel active" role="tabpanel" aria-label="临床">
-      <div class="toolbar" id="toolbar-clinical"></div>
-      <div class="stats">
-        <span class="pill">当前显示 <strong id="count-clinical-shown">83</strong> / <span id="count-clinical-total2">83</span> 条</span>
-        <span class="filters" id="chips-clinical"></span>
+      <div class="tab-layout">
+        <aside class="side">
+          <div class="panel">
+            <div class="toolbar" id="toolbar-clinical"></div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="stats">
+            <span class="pill">当前显示 <strong id="count-clinical-shown">83</strong> / <span id="count-clinical-total2">83</span> 条</span>
+            <span class="filters" id="chips-clinical"></span>
+          </div>
+          <div class="results"><div class="card-grid" id="results-clinical"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
+        </main>
       </div>
-      <div class="results"><div class="card-grid" id="results-clinical"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
     </section>
 
     <section id="tab-patent" class="tabpanel" role="tabpanel" aria-label="专利">
-      <div class="toolbar" id="toolbar-patent"></div>
-      <div class="stats">
-        <span class="pill">当前显示 <strong id="count-patent-shown">213</strong> / <span id="count-patent-total2">213</span> 条</span>
-        <span class="filters" id="chips-patent"></span>
+      <div class="tab-layout">
+        <aside class="side">
+          <div class="panel">
+            <div class="toolbar" id="toolbar-patent"></div>
+          </div>
+        </aside>
+        <main class="main">
+          <div class="stats">
+            <span class="pill">当前显示 <strong id="count-patent-shown">213</strong> / <span id="count-patent-total2">213</span> 条</span>
+            <span class="filters" id="chips-patent"></span>
+          </div>
+          <div class="results"><div class="card-grid" id="results-patent"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
+        </main>
       </div>
-      <div class="results"><div class="card-grid" id="results-patent"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
     </section>
 
 	    <section id="tab-sci" class="tabpanel" role="tabpanel" aria-label="SCI">
-	      <div class="toolbar" id="toolbar-sci"></div>
-	      <div class="stats">
-	        <span class="pill">当前显示 <strong id="count-sci-shown">108</strong> / <span id="count-sci-total2">108</span> 条</span>
-	        <span class="filters" id="chips-sci"></span>
+	      <div class="tab-layout">
+	        <aside class="side">
+	          <div class="panel">
+	            <div class="toolbar" id="toolbar-sci"></div>
+	          </div>
+	        </aside>
+	        <main class="main">
+	          <div class="stats">
+	            <span class="pill">当前显示 <strong id="count-sci-shown">108</strong> / <span id="count-sci-total2">108</span> 条</span>
+	            <span class="filters" id="chips-sci"></span>
+	          </div>
+	          <div class="results"><div class="card-grid" id="results-sci"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
+	        </main>
 	      </div>
-	      <div class="results"><div class="card-grid" id="results-sci"><div class="empty">加载中… 若这里一直为空/筛选无效，请用浏览器打开该 HTML（IDE 预览通常禁用脚本）。</div></div></div>
 	    </section>
 
 	    <section id="tab-analysis" class="tabpanel" role="tabpanel" aria-label="分析">
-	      <div class="toolbar" id="toolbar-analysis"></div>
-	      <div class="analysis-grid">
-	        <div class="results">
-	          <div class="barlist" id="analysis-left"><div class="empty">加载中…</div></div>
-	        </div>
-	        <div class="results">
-	          <div class="barlist" id="analysis-right"><div class="empty">加载中…</div></div>
-	        </div>
+	      <div class="tab-layout">
+	        <aside class="side">
+	          <div class="panel">
+	            <div class="toolbar" id="toolbar-analysis"></div>
+	          </div>
+	        </aside>
+	        <main class="main">
+	          <div class="analysis-grid">
+	            <div class="results">
+	              <div class="barlist" id="analysis-left"><div class="empty">加载中…</div></div>
+	            </div>
+	            <div class="results">
+	              <div class="barlist" id="analysis-right"><div class="empty">加载中…</div></div>
+	            </div>
+	          </div>
+	        </main>
 	      </div>
 	    </section>
 
@@ -967,14 +1182,15 @@
 	        return true;
 	      }
 
-	      function renderActiveFilters() {
+	    function renderActiveFilters() {
 	        const chips = [];
 	        let hasMulti = false;
 	        for (const f of filters) {
 	          const set = getSelectedSet(f.id);
 	          if (set.size > 1) hasMulti = true;
 	          for (const v of Array.from(set)) {
-	            chips.push(`<span class="chip">${escapeHtml(f.label)}：${escapeHtml(v)}</span>`);
+	            const cls = `chip chip-${f.id.replaceAll('_','-')}`;
+	            chips.push(`<span class="${cls}">${escapeHtml(f.label)}：${escapeHtml(v)}</span>`);
 	          }
 	        }
 	        if (hasMulti) {
