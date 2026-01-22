@@ -14,28 +14,47 @@
       --muted: rgba(15,23,42,0.62);
       --border: rgba(15,23,42,0.10);
       --border2: rgba(15,23,42,0.14);
-      /* WECARE red/gray — bright & soft */
-      --brand1: #dc2626; /* red */
-      --brand2: #ef4444; /* bright red */
-      --brand3: #fb7185; /* soft rose */
+      /* palette from Unknown.jpeg (used as accents, keep overall light) */
+      --p-blue: #0367A6;
+      --p-green: #3B7302;
+      --p-yellow: #F2B705;
+      --p-orange: #F27405;
+      --p-red: #A6290D;
+
+      /* brand accents (warm) */
+      --brand1: var(--p-red);
+      --brand2: var(--p-orange);
+      --brand3: var(--p-yellow);
       --accent: var(--brand2);
-      --accent2: var(--brand3);
+      --accent2: var(--p-blue);
       --danger: #dc2626;
-      --ok: #0ea5e9;
+      --ok: var(--p-blue);
       --shadow: 0 18px 48px rgba(15,23,42,0.12);
       --shadow2: 0 10px 28px rgba(15,23,42,0.10);
-      --ring: 0 0 0 4px rgba(239,68,68,0.18);
+      --ring: 0 0 0 4px rgba(242,116,5,0.18);
       --radius: 16px;
+
+      /* section accents */
+      --acc-clinical-a: rgba(59,115,2,0.86);
+      --acc-clinical-b: rgba(242,183,5,0.78);
+      --acc-patent-a: rgba(242,116,5,0.90);
+      --acc-patent-b: rgba(166,41,13,0.82);
+      --acc-sci-a: rgba(3,103,166,0.86);
+      --acc-sci-b: rgba(59,115,2,0.62);
+      --acc-analysis-a: rgba(242,183,5,0.92);
+      --acc-analysis-b: rgba(242,116,5,0.78);
+      --acc-add-a: rgba(166,41,13,0.88);
+      --acc-add-b: rgba(242,116,5,0.70);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 28px;
       background:
-        radial-gradient(1100px 640px at 10% -10%, rgba(239,68,68,0.18), transparent 58%),
-        radial-gradient(1200px 640px at 22% -10%, rgba(251,113,133,0.14), transparent 58%),
-        radial-gradient(900px 620px at 92% 8%, rgba(239,68,68,0.12), transparent 60%),
-        radial-gradient(1000px 520px at 40% 110%, rgba(100,116,139,0.10), transparent 60%),
+        radial-gradient(1100px 640px at 10% -10%, rgba(242,116,5,0.14), transparent 58%),
+        radial-gradient(1200px 640px at 22% -10%, rgba(242,183,5,0.12), transparent 58%),
+        radial-gradient(900px 620px at 92% 8%, rgba(3,103,166,0.10), transparent 60%),
+        radial-gradient(1000px 520px at 40% 110%, rgba(59,115,2,0.08), transparent 60%),
         linear-gradient(180deg, #f8fafc, var(--bg));
       color: var(--text);
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
@@ -52,7 +71,7 @@
       padding: 14px 16px;
       background:
         linear-gradient(rgba(255,255,255,0.74), rgba(255,255,255,0.74)) padding-box,
-        linear-gradient(135deg, rgba(239,68,68,0.34), rgba(251,113,133,0.26), rgba(100,116,139,0.20)) border-box;
+        linear-gradient(135deg, rgba(242,116,5,0.32), rgba(242,183,5,0.24), rgba(3,103,166,0.18)) border-box;
       border: 1px solid transparent;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -88,8 +107,8 @@
       height: 36px;
       border-radius: 12px;
       background: radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.0) 60%),
-                  linear-gradient(135deg, rgba(220,38,38,0.95), rgba(239,68,68,0.92), rgba(251,113,133,0.90));
-      box-shadow: 0 14px 28px rgba(239,68,68,0.14);
+                  linear-gradient(135deg, rgba(166,41,13,0.95), rgba(242,116,5,0.92), rgba(242,183,5,0.88));
+      box-shadow: 0 14px 28px rgba(242,116,5,0.16);
       border: 1px solid rgba(255,255,255,0.55);
       position: relative;
     }
@@ -110,7 +129,7 @@
       line-height: 1.15;
     }
     .wordmark {
-      background: linear-gradient(135deg, rgba(220,38,38,0.98), rgba(239,68,68,0.98), rgba(251,113,133,0.98));
+      background: linear-gradient(135deg, rgba(166,41,13,0.98), rgba(242,116,5,0.98), rgba(242,183,5,0.98));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -134,20 +153,45 @@
       font-size: 12px; color: var(--muted);
     }
     .pill strong { color: var(--text); }
-    .pill.red { border-color: rgba(239,68,68,0.20); background: rgba(239,68,68,0.10); }
-    .pill.rose { border-color: rgba(251,113,133,0.20); background: rgba(251,113,133,0.10); }
-    .pill.slate { border-color: rgba(100,116,139,0.20); background: rgba(100,116,139,0.10); }
+    .pill.clinical { border-color: rgba(59,115,2,0.22); background: rgba(59,115,2,0.08); }
+    .pill.patent { border-color: rgba(242,116,5,0.22); background: rgba(242,116,5,0.08); }
+    .pill.sci { border-color: rgba(3,103,166,0.22); background: rgba(3,103,166,0.08); }
 
     .header {
       margin-top: 14px;
       padding: 12px 14px;
       background:
         linear-gradient(rgba(255,255,255,0.62), rgba(255,255,255,0.62)) padding-box,
-        linear-gradient(135deg, rgba(239,68,68,0.20), rgba(251,113,133,0.16), rgba(100,116,139,0.14)) border-box;
+        linear-gradient(135deg, rgba(242,116,5,0.18), rgba(242,183,5,0.14), rgba(3,103,166,0.10)) border-box;
       border: 1px solid transparent;
       border-radius: var(--radius);
       box-shadow: var(--shadow2);
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .header::after {
+      content: "";
+      display: block;
+      height: 3px;
+      border-radius: 999px;
+      margin-top: 10px;
+      background: linear-gradient(90deg, rgba(242,116,5,0.62), rgba(242,183,5,0.52), rgba(3,103,166,0.28));
+    }
+    html[data-tab="clinical"] .header::after {
+      background: linear-gradient(90deg, var(--acc-clinical-a), var(--acc-clinical-b), rgba(255,255,255,0.0));
+    }
+    html[data-tab="patent"] .header::after {
+      background: linear-gradient(90deg, var(--acc-patent-a), var(--acc-patent-b), rgba(255,255,255,0.0));
+    }
+    html[data-tab="sci"] .header::after {
+      background: linear-gradient(90deg, var(--acc-sci-a), var(--acc-sci-b), rgba(255,255,255,0.0));
+    }
+    html[data-tab="analysis"] .header::after {
+      background: linear-gradient(90deg, var(--acc-analysis-a), var(--acc-analysis-b), rgba(255,255,255,0.0));
+    }
+    html[data-tab="add"] .header::after {
+      background: linear-gradient(90deg, var(--acc-add-a), var(--acc-add-b), rgba(255,255,255,0.0));
     }
     .bar {
       display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
@@ -166,12 +210,67 @@
       font-weight: 800;
       letter-spacing: .15px;
       transition: transform .12s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease, color .15s ease;
+      position: relative;
+      padding-left: 30px;
+    }
+    .tab::before {
+      content: "";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(100,116,139,0.45);
+      box-shadow: 0 10px 20px rgba(15,23,42,0.10);
+    }
+    .tab[data-tab="clinical"]::before {
+      background: linear-gradient(135deg, rgba(59,115,2,0.92), rgba(242,183,5,0.78));
+    }
+    .tab[data-tab="patent"]::before {
+      background: linear-gradient(135deg, rgba(242,116,5,0.92), rgba(166,41,13,0.82));
+    }
+    .tab[data-tab="sci"]::before {
+      background: linear-gradient(135deg, rgba(3,103,166,0.92), rgba(59,115,2,0.66));
+    }
+    .tab[data-tab="analysis"]::before {
+      background: linear-gradient(135deg, rgba(242,183,5,0.92), rgba(242,116,5,0.78));
+    }
+    .tab[data-tab="add"]::before {
+      background: linear-gradient(135deg, rgba(166,41,13,0.86), rgba(242,116,5,0.74));
     }
     .tab:hover { border-color: var(--border2); box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
     .tab.active {
-      border-color: rgba(239,68,68,0.22);
-      background: linear-gradient(180deg, rgba(239,68,68,0.14), rgba(251,113,133,0.10), rgba(100,116,139,0.06));
+      border-color: rgba(242,116,5,0.20);
+      background: linear-gradient(180deg, rgba(242,116,5,0.12), rgba(242,183,5,0.08), rgba(3,103,166,0.04));
       color: rgba(15,23,42,0.92);
+      box-shadow: 0 16px 40px rgba(242,116,5,0.10);
+    }
+    html[data-tab="clinical"] .tab.active {
+      border-color: rgba(59,115,2,0.22);
+      background: linear-gradient(180deg, rgba(59,115,2,0.10), rgba(242,183,5,0.08), rgba(255,255,255,0.0));
+      box-shadow: 0 16px 40px rgba(59,115,2,0.10);
+    }
+    html[data-tab="patent"] .tab.active {
+      border-color: rgba(242,116,5,0.22);
+      background: linear-gradient(180deg, rgba(242,116,5,0.12), rgba(166,41,13,0.06), rgba(255,255,255,0.0));
+      box-shadow: 0 16px 40px rgba(242,116,5,0.12);
+    }
+    html[data-tab="sci"] .tab.active {
+      border-color: rgba(3,103,166,0.20);
+      background: linear-gradient(180deg, rgba(3,103,166,0.10), rgba(59,115,2,0.06), rgba(255,255,255,0.0));
+      box-shadow: 0 16px 40px rgba(3,103,166,0.10);
+    }
+    html[data-tab="analysis"] .tab.active {
+      border-color: rgba(242,183,5,0.24);
+      background: linear-gradient(180deg, rgba(242,183,5,0.14), rgba(242,116,5,0.06), rgba(255,255,255,0.0));
+      box-shadow: 0 16px 40px rgba(242,183,5,0.10);
+    }
+    html[data-tab="add"] .tab.active {
+      border-color: rgba(166,41,13,0.20);
+      background: linear-gradient(180deg, rgba(166,41,13,0.10), rgba(242,116,5,0.06), rgba(255,255,255,0.0));
+      box-shadow: 0 16px 40px rgba(166,41,13,0.10);
     }
     .tabpanel { display: none; }
     .tabpanel.active { display: block; }
@@ -188,7 +287,7 @@
     }
     textarea { min-height: 92px; resize: vertical; }
     select:focus, input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-      border-color: rgba(239,68,68,0.35);
+      border-color: rgba(242,116,5,0.38);
       box-shadow: var(--ring);
     }
     input[type="text"]::placeholder, input[type="password"]::placeholder, textarea::placeholder { color: rgba(15,23,42,0.45); }
@@ -208,12 +307,12 @@
     }
     .btn:hover { border-color: var(--border2); box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
     .btn.primary {
-      border-color: rgba(239,68,68,0.35);
-      background: linear-gradient(135deg, rgba(220,38,38,0.94), rgba(239,68,68,0.92), rgba(251,113,133,0.90));
+      border-color: rgba(242,116,5,0.28);
+      background: linear-gradient(135deg, rgba(166,41,13,0.92), rgba(242,116,5,0.92), rgba(242,183,5,0.88));
       color: white;
-      box-shadow: 0 14px 34px rgba(239,68,68,0.16);
+      box-shadow: 0 14px 34px rgba(242,116,5,0.16);
     }
-    .btn.primary:hover { box-shadow: 0 16px 44px rgba(239,68,68,0.22); }
+    .btn.primary:hover { box-shadow: 0 16px 44px rgba(242,116,5,0.22); }
     .btn:active { transform: translateY(1px); }
     .stats { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
     .filters { display: inline-flex; gap: 8px; flex-wrap: wrap; }
@@ -226,7 +325,7 @@
 	      color: rgba(15,23,42,0.88);
 	    }
 	    .picked { margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap; }
-	    .chip.chip-picked { border-color: rgba(251,113,133,0.22); background: rgba(251,113,133,0.10); }
+	    .chip.chip-picked { border-color: rgba(242,116,5,0.20); background: rgba(242,183,5,0.10); }
 	    .chip-x {
 	      appearance: none;
 	      border: 0;
@@ -238,18 +337,36 @@
 	      padding: 0 4px;
 	    }
 	    .chip-x:hover { color: var(--text); }
-	    .chip-clinical-strain { border-color: rgba(239,68,68,0.24); background: rgba(239,68,68,0.10); }
-	    .chip-sci-strain { border-color: rgba(251,113,133,0.26); background: rgba(251,113,133,0.10); }
-	    .chip-clinical-dir, .chip-patent-dir { border-color: rgba(251,113,133,0.26); background: rgba(251,113,133,0.10); }
-	    .chip-clinical-cat, .chip-sci-cat { border-color: rgba(100,116,139,0.22); background: rgba(100,116,139,0.10); }
-	    .chip-patent-strainno { border-color: rgba(220,38,38,0.20); background: rgba(220,38,38,0.10); }
-	    .chip-patent-species, .chip-sci-func { border-color: rgba(239,68,68,0.18); background: rgba(239,68,68,0.08); }
+	    .chip-clinical-strain { border-color: rgba(59,115,2,0.26); background: linear-gradient(135deg, rgba(59,115,2,0.12), rgba(242,183,5,0.08)); }
+	    .chip-sci-strain { border-color: rgba(3,103,166,0.26); background: linear-gradient(135deg, rgba(3,103,166,0.12), rgba(59,115,2,0.06)); }
+	    .chip-clinical-dir, .chip-patent-dir { border-color: rgba(242,116,5,0.26); background: linear-gradient(135deg, rgba(242,116,5,0.12), rgba(166,41,13,0.06)); }
+	    .chip-clinical-cat, .chip-sci-cat { border-color: rgba(242,183,5,0.28); background: rgba(242,183,5,0.10); }
+	    .chip-patent-strainno { border-color: rgba(166,41,13,0.22); background: rgba(166,41,13,0.08); }
+	    .chip-patent-species, .chip-sci-func { border-color: rgba(3,103,166,0.22); background: rgba(3,103,166,0.08); }
     .results {
       background: var(--panelSolid);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow2);
       overflow: hidden;
+    }
+    html[data-tab="clinical"] #tab-clinical .results {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--panelSolid), var(--panelSolid)) padding-box,
+        linear-gradient(135deg, rgba(59,115,2,0.18), rgba(242,183,5,0.12), rgba(242,116,5,0.08)) border-box;
+    }
+    html[data-tab="patent"] #tab-patent .results {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--panelSolid), var(--panelSolid)) padding-box,
+        linear-gradient(135deg, rgba(242,116,5,0.18), rgba(166,41,13,0.10), rgba(242,183,5,0.08)) border-box;
+    }
+    html[data-tab="sci"] #tab-sci .results {
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--panelSolid), var(--panelSolid)) padding-box,
+        linear-gradient(135deg, rgba(3,103,166,0.18), rgba(59,115,2,0.10), rgba(242,183,5,0.06)) border-box;
     }
 
     .tab-layout {
@@ -278,7 +395,7 @@
       backdrop-filter: blur(10px);
       background:
         linear-gradient(var(--panel), var(--panel)) padding-box,
-        linear-gradient(135deg, rgba(239,68,68,0.16), rgba(251,113,133,0.12), rgba(100,116,139,0.10)) border-box;
+        linear-gradient(135deg, rgba(242,116,5,0.16), rgba(242,183,5,0.12), rgba(3,103,166,0.10)) border-box;
     }
     .toolbar {
       display: grid;
@@ -309,15 +426,15 @@
       padding: 10px 12px; border-bottom: 1px solid rgba(15,23,42,0.06);
       vertical-align: top; line-height: 1.35;
     }
-    tbody tr:hover td { background: rgba(37,99,235,0.05); }
-    a { color: rgba(220,38,38,0.98); text-decoration: none; }
+    tbody tr:hover td { background: rgba(242,116,5,0.04); }
+    a { color: var(--p-blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .empty { padding: 16px; color: var(--muted); }
     .footer { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.45; }
     code { background: rgba(15,23,42,0.06); border: 1px solid rgba(15,23,42,0.10); padding: 0 6px; border-radius: 6px; }
 
     /* --- Card View (better than wide tables) --- */
-    .btn.danger { border-color: rgba(220,38,38,0.35); background: rgba(220,38,38,0.10); color: rgba(127,29,29,0.95); }
+    .btn.danger { border-color: rgba(166,41,13,0.30); background: rgba(166,41,13,0.10); color: rgba(124,45,18,0.95); }
     .card-grid {
       padding: 12px;
       display: grid;
@@ -340,9 +457,27 @@
       transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
     }
     .card:hover {
-      border-color: rgba(37,99,235,0.22);
+      border-color: rgba(242,116,5,0.18);
       box-shadow: 0 18px 44px rgba(15,23,42,0.10);
       transform: translateY(-1px);
+    }
+    html[data-tab="clinical"] #tab-clinical .card {
+      background:
+        radial-gradient(260px 140px at 0% 0%, rgba(59,115,2,0.10), rgba(255,255,255,0.0) 60%),
+        rgba(255,255,255,0.98);
+      border-left: 3px solid rgba(59,115,2,0.26);
+    }
+    html[data-tab="patent"] #tab-patent .card {
+      background:
+        radial-gradient(260px 140px at 0% 0%, rgba(242,116,5,0.10), rgba(255,255,255,0.0) 60%),
+        rgba(255,255,255,0.98);
+      border-left: 3px solid rgba(242,116,5,0.26);
+    }
+    html[data-tab="sci"] #tab-sci .card {
+      background:
+        radial-gradient(260px 140px at 0% 0%, rgba(3,103,166,0.10), rgba(255,255,255,0.0) 60%),
+        rgba(255,255,255,0.98);
+      border-left: 3px solid rgba(3,103,166,0.22);
     }
     .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .card-title { font-weight: 900; letter-spacing: .15px; line-height: 1.25; }
@@ -374,14 +509,14 @@
       cursor: pointer;
       padding: 6px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(37,99,235,0.22);
-      background: rgba(37,99,235,0.10);
+      border: 1px solid rgba(3,103,166,0.22);
+      background: rgba(3,103,166,0.08);
       color: rgba(15,23,42,0.85);
       font-size: 12px;
       line-height: 1;
       transition: background .15s ease, border-color .15s ease, transform .12s ease;
     }
-    .chip-btn:hover { background: rgba(37,99,235,0.14); border-color: rgba(37,99,235,0.28); }
+    .chip-btn:hover { background: rgba(3,103,166,0.12); border-color: rgba(3,103,166,0.28); }
     .meta {
       margin-top: 10px;
       display: grid;
@@ -412,7 +547,11 @@
     /* Drawer */
     .drawer-mask {
       position: fixed; inset: 0;
-      background: rgba(15,23,42,0.45);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(242,116,5,0.18), rgba(0,0,0,0.0) 60%),
+        radial-gradient(900px 520px at 90% 20%, rgba(3,103,166,0.16), rgba(0,0,0,0.0) 60%),
+        rgba(15,23,42,0.32);
+      backdrop-filter: blur(3px);
       display: none;
       z-index: 50;
     }
@@ -427,22 +566,67 @@
       z-index: 60;
       display: flex;
       flex-direction: column;
+      border-radius: 22px 0 0 22px;
+      overflow: hidden;
+    }
+    .drawer::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 6px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(166,41,13,0.90), rgba(242,116,5,0.82), rgba(242,183,5,0.70), rgba(3,103,166,0.62));
+      opacity: .9;
+      pointer-events: none;
     }
     .drawer.show { transform: translateX(0); }
     .drawer-head {
-      padding: 14px 14px 10px 14px;
+      padding: 14px 16px 12px 18px;
       border-bottom: 1px solid rgba(15,23,42,0.08);
       display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+      background:
+        radial-gradient(520px 240px at 0% 0%, rgba(242,116,5,0.10), rgba(255,255,255,0.0) 60%),
+        radial-gradient(520px 240px at 100% 0%, rgba(3,103,166,0.08), rgba(255,255,255,0.0) 60%),
+        rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
     .drawer-title { font-weight: 900; line-height: 1.25; }
-    .drawer-body { padding: 14px; overflow: auto; }
-    .dl { display: grid; grid-template-columns: 160px 1fr; gap: 10px 12px; }
-    @media (max-width: 720px) {
-      .dl { grid-template-columns: 1fr; }
-      .dt { font-weight: 800; }
+    .drawer-body {
+      padding: 14px 16px 18px 18px;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(248,250,252,0.95), rgba(255,255,255,0.95));
     }
-    .dt { color: rgba(15,23,42,0.55); font-size: 12px; }
-    .dd { color: rgba(15,23,42,0.90); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .btn.icon {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .dl { display: grid; gap: 10px; }
+    .dl-row {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 10px 12px;
+      padding: 10px 12px;
+      border: 1px solid rgba(15,23,42,0.08);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 10px 26px rgba(15,23,42,0.06);
+    }
+    @media (max-width: 720px) {
+      .dl-row { grid-template-columns: 1fr; }
+    }
+    .dt { color: rgba(15,23,42,0.56); font-size: 12px; font-weight: 800; }
+    .dd { color: rgba(15,23,42,0.92); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
 
     /* ADD */
     /* (panel moved to shared styles above) */
@@ -491,12 +675,12 @@
 	      box-shadow: 0 10px 26px rgba(15,23,42,0.06);
 	      transition: transform .12s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
 	    }
-	    .barrow:hover { border-color: rgba(37,99,235,0.22); transform: translateY(-1px); box-shadow: 0 16px 40px rgba(15,23,42,0.10); }
+	    .barrow:hover { border-color: rgba(242,116,5,0.22); transform: translateY(-1px); box-shadow: 0 16px 40px rgba(15,23,42,0.10); }
 	    .barrow.active { border-color: rgba(124,58,237,0.22); background: rgba(124,58,237,0.08); }
 	    .barname { font-weight: 850; }
 	    .barhint { color: rgba(15,23,42,0.62); font-size: 12px; margin-top: 3px; }
 	    .bartrack { height: 8px; background: rgba(15,23,42,0.08); border-radius: 999px; overflow: hidden; margin-top: 6px; }
-	    .barfill { height: 100%; background: rgba(37,99,235,0.75); width: 0%; border-radius: 999px; }
+	    .barfill { height: 100%; background: linear-gradient(90deg, rgba(166,41,13,0.78), rgba(242,116,5,0.72), rgba(242,183,5,0.68)); width: 0%; border-radius: 999px; }
 	    .barcount { color: rgba(15,23,42,0.85); font-weight: 900; }
   </style>
 	</head>
@@ -511,9 +695,9 @@
           </div>
         </div>
         <div class="top-actions">
-          <span class="pill red">临床 <strong id="count-clinical-total">83</strong></span>
-          <span class="pill rose">专利 <strong id="count-patent-total">213</strong></span>
-          <span class="pill slate">SCI <strong id="count-sci-total">108</strong></span>
+          <span class="pill clinical">临床 <strong id="count-clinical-total">83</strong></span>
+          <span class="pill patent">专利 <strong id="count-patent-total">213</strong></span>
+          <span class="pill sci">SCI <strong id="count-sci-total">108</strong></span>
         </div>
       </div>
 
@@ -912,7 +1096,7 @@
           <div class="drawer-title" id="drawer-title"></div>
           <div class="hint" id="drawer-sub"></div>
         </div>
-        <button class="btn" id="drawer-close">关闭</button>
+        <button class="btn icon" id="drawer-close" type="button" aria-label="关闭">×</button>
       </div>
       <div class="drawer-body">
         <div class="dl" id="drawer-dl"></div>
@@ -937,11 +1121,11 @@
       document.getElementById('drawer-title').textContent = title || '';
       document.getElementById('drawer-sub').textContent = subtitle || '';
       const dl = document.getElementById('drawer-dl');
-      dl.innerHTML = items.map(({
-        k, v
-      }) => `
-        <div class="dt">${escapeHtml(k)}</div>
-        <div class="dd">${renderValue(v)}</div>
+      dl.innerHTML = items.map(({ k, v }) => `
+        <div class="dl-row">
+          <div class="dt">${escapeHtml(k)}</div>
+          <div class="dd">${renderValue(v)}</div>
+        </div>
       `).join('');
       drawerMask.classList.add('show');
       drawer.classList.add('show');
@@ -1633,6 +1817,7 @@
         tabs.forEach(b => b.classList.toggle('active', b === btn));
         tabs.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
         Object.entries(panels).forEach(([k, el]) => el.classList.toggle('active', k === key));
+        document.documentElement.setAttribute('data-tab', key);
       }
       tabs.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1640,6 +1825,7 @@
           activateTab(key);
         });
       });
+      activateTab('clinical');
 
       const clinicalData = readJsonScript('DATA_CLINICAL');
       const clinicalCols = readJsonScript('COLS_CLINICAL');
