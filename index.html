@@ -1909,7 +1909,7 @@
         const legendEl = document.getElementById('access-legend');
         if (legendEl) {
           const items = [
-            { sym:'√', cls:'ga-ok',       label:'已注册可售卖' },
+            { sym:'✔', cls:'ga-ok',       label:'已注册可售卖' },
             { sym:'-', cls:'ga-free',     label:'无需注册可售卖' },
             { sym:'O', cls:'ga-progress', label:'注册进行中' },
             { sym:'X', cls:'ga-stop',     label:'注册终止或暂缓' },
@@ -1973,7 +1973,8 @@
                 const divClass = grp ? ' ga-sub-divider' : '';
                 const specialTag = isSpecial
                   ? `<span class="ga-special" title="特殊情况">*</span>` : '';
-                cells += `<td class="${meta.cls}${divClass}" title="${escapeHtml(meta.label)}${isSpecial?' · 特殊情况':''}">${escapeHtml(sym||'—')}${specialTag}</td>`;
+                const displaySym = sym === '√' ? '✔' : (sym || '—');
+                cells += `<td class="${meta.cls}${divClass}" title="${escapeHtml(meta.label)}${isSpecial?' · 特殊情况':''}">${escapeHtml(displaySym)}${specialTag}</td>`;
               });
 
               rowHtmls.push({ visible,
@@ -1988,7 +1989,7 @@
           });
 
           html += `</tbody></table>`
-               + `<p class="ga-footnote">注：韩国 / 印尼 / 智利"保健品"列表示该国保健品类别注册；巴西"农/饲用"列表示农业或饲料用途注册。* 表示特殊情况，详见原始档案。</p>`
+               + `<p class="ga-footnote">注：韩国 / 印尼 / 智利"保健品"列表示该国保健品类别注册；巴西"农/饲用"列表示农业或饲料用途注册。* 表示特殊情况。</p>`
                + `</div>`;
 
           document.getElementById('access-content').innerHTML = html;
