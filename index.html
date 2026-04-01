@@ -1841,9 +1841,27 @@
       (function initGlobalAccess() {
         const ga = globalAccessData;
         if (!ga || !ga.sections) return;
-        const countries = ga.countries || [];
         const sections = ga.sections || [];
-        const legend = ga.legend || [];
+
+        // Country groups: each group maps to one or more raw data columns
+        // cols[0] = main column key, cols[1] = sub-category key (optional)
+        const countryGroups = [
+          { label: '澳洲',   cols: ['AU'] },
+          { label: '欧洲',   cols: ['EU'] },
+          { label: '韩国',   cols: ['KR', 'KR*'], subs: ['食品', '保健品'] },
+          { label: '泰国',   cols: ['TH'] },
+          { label: '马来西亚', cols: ['MY'] },
+          { label: '土耳其', cols: ['TR'] },
+          { label: '印尼',   cols: ['ID', 'ID*'], subs: ['食品', '保健品'] },
+          { label: '美国',   cols: ['US'] },
+          { label: '巴西',   cols: ['BR', 'BR*'], subs: ['食品', '农/饲用'] },
+          { label: '智利',   cols: ['CL', 'CL*'], subs: ['食品', '保健品'] },
+          { label: '加拿大', cols: ['CA'] },
+          { label: '中国',   cols: ['CN'] },
+        ];
+        // Flat ordered list of all column keys (for data lookup)
+        const allCols = countryGroups.flatMap(g => g.cols);
+        const totalDataCols = allCols.length; // 16
 
         const symbolMeta = {
           '√': { cls: 'ga-ok',       label: '已注册可售卖' },
@@ -1856,36 +1874,75 @@
         // Inject styles
         const style = document.createElement('style');
         style.textContent = `
-          .ga-table { border-collapse: collapse; min-width: 100%; font-size: 12.5px; }
-          .ga-table th, .ga-table td { padding: 5px 8px; text-align: center; border: 1px solid rgba(15,23,42,0.09); white-space: nowrap; }
-          .ga-table th { background: rgba(242,116,5,0.08); font-weight: 700; position: sticky; top: 0; z-index: 2; }
-          .ga-table .ga-species { text-align: left; font-size: 11.5px; color: rgba(15,23,42,0.55); font-style: italic; max-width: 220px; white-space: normal; }
-          .ga-table .ga-code { text-align: left; font-weight: 700; white-space: nowrap; }
-          .ga-section-header td { background: linear-gradient(90deg, rgba(242,116,5,0.12), rgba(242,183,5,0.08)); font-weight: 900; text-align: left !important; color: var(--p-orange); font-size: 13px; border-top: 2px solid rgba(242,116,5,0.25) !important; }
-          .ga-ok      { background: rgba(59,115,2,0.13); color: #2a6000; font-weight:700; }
-          .ga-progress{ background: rgba(3,103,166,0.11); color: #0355a0; font-weight:700; }
-          .ga-free    { background: rgba(242,183,5,0.10); color: #7a5700; }
-          .ga-stop    { background: rgba(166,41,13,0.12); color: #a6290d; font-weight:700; text-decoration: line-through; }
-          .ga-none    { background: transparent; color: rgba(15,23,42,0.25); }
-          .ga-legend  { display:inline-flex; align-items:center; gap:5px; padding:4px 9px; border-radius:999px; font-size:12px; }
-          .ga-search-hl { background: rgba(242,183,5,0.35); }
-          .ga-hidden  { display: none !important; }
+          .ga-wrap { overflow-x: auto; }
+          .ga-table { border-collapse: collapse; font-size: 12.5px; width: 100%; }
+          .ga-table th, .ga-table td { padding: 5px 10px; text-align: center; border: 1px solid rgba(15,23,42,0.09); white-space: nowrap; }
+          .ga-table thead tr:first-child th { background: rgba(15,23,42,0.06); font-weight: 800; font-size: 12px; position: sticky; top: 0; z-index: 3; border-bottom: none; }
+          .ga-table thead tr:last-child th { background: rgba(242,116,5,0.06); font-weight: 600; font-size: 11px; color: rgba(15,23,42,0.65); position: sticky; top: 29px; z-index: 3; border-top: none; }
+          .ga-table thead tr:first-child th.ga-th-group { border-bottom: 2px solid rgba(242,116,5,0.20); }
+          .ga-table .ga-species { text-align: left; font-size: 11.5px; color: rgba(15,23,42,0.50); font-style: italic; max-width: 200px; white-space: normal; line-height: 1.35; }
+          .ga-table .ga-code { text-align: left; font-weight: 700; white-space: nowrap; min-width: 80px; }
+          .ga-table .ga-th-label { text-align: left !important; }
+          .ga-section-header td { background: linear-gradient(90deg,rgba(242,116,5,0.10),rgba(242,183,5,0.06)); font-weight: 900; text-align: left !important; color: var(--p-orange); font-size: 13px; border-top: 2px solid rgba(242,116,5,0.22) !important; padding: 8px 12px; letter-spacing:.3px; }
+          .ga-ok       { background: rgba(59,115,2,0.12); color: #1e6b00; font-weight: 700; }
+          .ga-progress { background: rgba(3,103,166,0.10); color: #0355a0; font-weight: 700; }
+          .ga-free     { background: rgba(242,183,5,0.09); color: #7a5a00; }
+          .ga-stop     { background: rgba(166,41,13,0.10); color: #a6290d; font-weight: 700; text-decoration: line-through; }
+          .ga-none     { background: transparent; color: rgba(15,23,42,0.18); }
+          .ga-special  { font-size: 9px; vertical-align: super; color: rgba(3,103,166,0.8); margin-left:1px; }
+          .ga-legend-bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+          .ga-pill { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:12px; border:1px solid transparent; }
+          .ga-pill.ga-ok       { background:rgba(59,115,2,0.10);  border-color:rgba(59,115,2,0.20);  color:#1e6b00; }
+          .ga-pill.ga-progress { background:rgba(3,103,166,0.09); border-color:rgba(3,103,166,0.20); color:#0355a0; }
+          .ga-pill.ga-free     { background:rgba(242,183,5,0.10); border-color:rgba(242,183,5,0.30); color:#7a5a00; }
+          .ga-pill.ga-stop     { background:rgba(166,41,13,0.09); border-color:rgba(166,41,13,0.20); color:#a6290d; }
+          .ga-pill.ga-none     { background:rgba(15,23,42,0.04);  border-color:rgba(15,23,42,0.12);  color:rgba(15,23,42,0.45); }
+          .ga-pill .ga-sym     { font-weight:800; font-size:14px; }
+          .ga-footnote { font-size:11px; color:rgba(15,23,42,0.45); margin-top:10px; line-height:1.6; }
+          .ga-search-hl { background:rgba(242,183,5,0.38); border-radius:2px; }
+          .ga-hidden { display:none !important; }
+          .ga-sub-divider { border-left: 2px solid rgba(242,116,5,0.18) !important; }
         `;
         document.head.appendChild(style);
 
-        // Render legend
+        // Legend bar
         const legendEl = document.getElementById('access-legend');
         if (legendEl) {
-          legendEl.innerHTML = Object.entries(symbolMeta).map(([sym, m]) =>
-            `<span class="ga-legend ${m.cls}">${escapeHtml(sym || '空')} ${escapeHtml(m.label)}</span>`
+          const items = [
+            { sym:'√', cls:'ga-ok',       label:'已注册可售卖' },
+            { sym:'-', cls:'ga-free',     label:'无需注册可售卖' },
+            { sym:'O', cls:'ga-progress', label:'注册进行中' },
+            { sym:'X', cls:'ga-stop',     label:'注册终止或暂缓' },
+            { sym:'—', cls:'ga-none',     label:'暂无规划' },
+          ];
+          legendEl.className = 'ga-legend-bar';
+          legendEl.innerHTML = items.map(it =>
+            `<span class="ga-pill ${it.cls}"><span class="ga-sym">${it.sym}</span>${it.label}</span>`
           ).join('');
         }
 
         function renderTable(query) {
           const q = (query || '').trim().toLowerCase();
-          let html = '<table class="ga-table"><thead><tr><th style="text-align:left;min-width:90px;">编号</th><th style="text-align:left;min-width:180px;">菌种</th>'
-            + countries.map(c => `<th>${escapeHtml(c)}</th>`).join('')
-            + '</tr></thead><tbody>';
+
+          // Build thead: row1 = country group labels, row2 = sub-labels
+          let thead1 = '<th class="ga-th-label" rowspan="2" style="min-width:85px;">编号</th>'
+                     + '<th class="ga-th-label" rowspan="2" style="min-width:185px;">菌种</th>';
+          let thead2 = '';
+          countryGroups.forEach(g => {
+            if (g.cols.length === 1) {
+              thead1 += `<th rowspan="2">${escapeHtml(g.label)}</th>`;
+            } else {
+              thead1 += `<th colspan="${g.cols.length}" class="ga-th-group">${escapeHtml(g.label)}</th>`;
+              g.subs.forEach((sub, si) => {
+                thead2 += `<th${si===0?' class="ga-sub-divider"':''}>${escapeHtml(sub)}</th>`;
+              });
+            }
+          });
+
+          let html = `<div class="ga-wrap"><table class="ga-table"><thead>`
+                   + `<tr>${thead1}</tr>`
+                   + `<tr>${thead2}</tr>`
+                   + `</thead><tbody>`;
 
           sections.forEach(sec => {
             let hasVisible = false;
@@ -1895,27 +1952,45 @@
               const matchSpecies = strain.species.toLowerCase().includes(q);
               const visible = !q || matchCode || matchSpecies;
               if (visible) hasVisible = true;
+
               const hl = (text) => {
                 if (!q || !text) return escapeHtml(text);
-                const idx = text.toLowerCase().indexOf(q);
-                if (idx < 0) return escapeHtml(text);
-                return escapeHtml(text.slice(0, idx)) + `<mark class="ga-search-hl">${escapeHtml(text.slice(idx, idx+q.length))}</mark>` + escapeHtml(text.slice(idx+q.length));
+                const i = text.toLowerCase().indexOf(q);
+                if (i < 0) return escapeHtml(text);
+                return escapeHtml(text.slice(0,i))
+                  + `<mark class="ga-search-hl">${escapeHtml(text.slice(i,i+q.length))}</mark>`
+                  + escapeHtml(text.slice(i+q.length));
               };
-              const cells = countries.map(c => {
-                const sym = (strain.status[c] || '').replace(/[*★]/g, '').trim();
-                const rawSym = strain.status[c] || '';
+
+              let cells = '';
+              allCols.forEach((col, ci) => {
+                const raw = (strain.status[col] || '').trim();
+                const isSpecial = raw.includes('*');
+                const sym = raw.replace(/[*★]/g, '').trim();
                 const meta = symbolMeta[sym] || symbolMeta[''];
-                const extraNote = rawSym !== sym ? `<sup style="font-size:9px;opacity:.6">${escapeHtml(rawSym.replace(sym,''))}</sup>` : '';
-                return `<td class="${meta.cls}" title="${escapeHtml(meta.label)}">${escapeHtml(sym || '—')}${extraNote}</td>`;
-              }).join('');
-              rowHtmls.push({ visible, html: `<tr class="${visible ? '' : 'ga-hidden'}"><td class="ga-code">${hl(strain.code)}</td><td class="ga-species">${hl(strain.species)}</td>${cells}</tr>` });
+                // Mark left border for sub-group first column
+                const grp = countryGroups.find(g => g.cols.length > 1 && g.cols[0] === col);
+                const divClass = grp ? ' ga-sub-divider' : '';
+                const specialTag = isSpecial
+                  ? `<span class="ga-special" title="特殊情况">*</span>` : '';
+                cells += `<td class="${meta.cls}${divClass}" title="${escapeHtml(meta.label)}${isSpecial?' · 特殊情况':''}">${escapeHtml(sym||'—')}${specialTag}</td>`;
+              });
+
+              rowHtmls.push({ visible,
+                html: `<tr class="${visible?'':'ga-hidden'}"><td class="ga-code">${hl(strain.code)}</td><td class="ga-species">${hl(strain.species)}</td>${cells}</tr>`
+              });
             });
+
             const secVisible = !q || hasVisible;
-            html += `<tr class="ga-section-header${secVisible ? '' : ' ga-hidden'}"><td colspan="${2 + countries.length}">${escapeHtml(sec.name)}</td></tr>`;
+            const totalCols = 2 + totalDataCols;
+            html += `<tr class="ga-section-header${secVisible?'':' ga-hidden'}"><td colspan="${totalCols}">${escapeHtml(sec.name)}</td></tr>`;
             rowHtmls.forEach(r => { html += r.html; });
           });
 
-          html += '</tbody></table>';
+          html += `</tbody></table>`
+               + `<p class="ga-footnote">注：韩国 / 印尼 / 智利"保健品"列表示该国保健品类别注册；巴西"农/饲用"列表示农业或饲料用途注册。* 表示特殊情况，详见原始档案。</p>`
+               + `</div>`;
+
           document.getElementById('access-content').innerHTML = html;
         }
 
